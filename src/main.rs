@@ -38,6 +38,8 @@ fn render_overlap(overlap: BTreeMap<NaiveDate, HashSet<&str>>) {
         print!("{}: ", date);
         println!("{} concurrent users", names.len());
         if verbose.is_some() {
+            let mut names = names.clone().drain().collect::<Vec<_>>();
+            names.sort_unstable();
             for name in names {
                 print!("{}, ", name);
             }
