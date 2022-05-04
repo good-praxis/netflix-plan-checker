@@ -1,5 +1,6 @@
-use chrono::NaiveDateTime;
+use chrono::{Duration, NaiveDate, NaiveDateTime};
 use serde::Deserialize;
+use std::collections::{BTreeMap, HashSet};
 use std::env;
 use std::fs::File;
 
@@ -26,7 +27,11 @@ fn main() {
 
     let records = read_records(&path);
 
-    println!("{}", records.len());
+    let overlap = find_overlap(&records);
+
+    for overlap in overlap {
+        println!("{:?}", overlap);
+    }
 }
 
 fn read_records(path: &str) -> Vec<Record> {
@@ -45,6 +50,25 @@ fn read_records(path: &str) -> Vec<Record> {
     records.sort_by(|a, b| a.timestamp.cmp(&b.timestamp));
 
     records
+}
+
+fn find_overlap(records: &Vec<Record>) -> BTreeMap<NaiveDate, HashSet<&str>> {
+    let mut overlap: BTreeMap<NaiveDate, HashSet<&str>> = BTreeMap::new();
+    let mut prev_ts: (NaiveDateTime, &str) = (NaiveDateTime::from_timestamp(0, 0), "");
+
+    for record in records {
+        if record.timestamp.signed_duration_since(prev_ts.0) < Duration::hours(1)
+            && record.name != prev_ts.1
+        {
+            overlap
+                .entry(record.timestamp.date())
+                .or_insert_with(HashSet::new)
+                .insert(&record.name);
+        }
+        prev_ts = (record.timestamp, &record.name);
+    }
+
+    overlap
 }
 
 fn ts_deserializer<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
