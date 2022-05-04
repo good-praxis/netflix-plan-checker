@@ -12,6 +12,7 @@ The result will look like this:
 (2022-04-11, {"User1", "User3"})
 ``` 
 where the usernames are instead populated by the exact profile names.
+
 ---
 Due to an implementation quirk, you might also run into late night playbacks that overlap with either the next or previous day, in that case they might occassionally be put into a date of their own, like this:
 ```
