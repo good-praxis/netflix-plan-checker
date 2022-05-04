@@ -29,8 +29,13 @@ fn main() {
 
     let overlap = find_overlap(&records);
 
-    for overlap in overlap {
-        println!("{:?}", overlap);
+    render_overlap(overlap);
+}
+
+fn render_overlap(overlap: BTreeMap<NaiveDate, HashSet<&str>>) {
+    for (date, names) in overlap {
+        print!("{}: ", date);
+        println!("{} concurrent users", names.len());
     }
 }
 

@@ -7,14 +7,13 @@ This has been tested on Linux, (arch, btw). It will detect users watching within
 The result will look like this:
 
 ```
-(2022-04-07, {"User1", "User2"})
-(2022-04-08, {"User2", "User1", "User3"})
-(2022-04-11, {"User1", "User3"})
+2022-04-22: 3 concurrent users
+2022-04-25: 3 concurrent users
+2022-04-26: 3 concurrent users
 ``` 
-where the usernames are instead populated by the exact profile names.
 
 ---
 Due to an implementation quirk, you might also run into late night playbacks that overlap with either the next or previous day, in that case they might occassionally be put into a date of their own, like this:
 ```
-(2022-04-12, {"User3"})
+2022-05-01: 1 concurrent users
 ```
