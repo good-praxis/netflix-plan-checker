@@ -12,8 +12,3 @@ The result will look like this:
 2022-04-26: 3 concurrent users
 ``` 
 
----
-Due to an implementation quirk, you might also run into late night playbacks that overlap with either the next or previous day, in that case they might occassionally be put into a date of their own, like this:
-```
-2022-05-01: 1 concurrent users
-```

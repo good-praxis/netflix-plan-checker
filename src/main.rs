@@ -66,6 +66,10 @@ fn find_overlap(records: &Vec<Record>) -> BTreeMap<NaiveDate, HashSet<&str>> {
             && record.name != prev_ts.1
         {
             overlap
+                .entry(prev_ts.0.date())
+                .or_insert_with(HashSet::new)
+                .insert(prev_ts.1); // insert previous timestamp to avoid single user overlaps
+            overlap
                 .entry(record.timestamp.date())
                 .or_insert_with(HashSet::new)
                 .insert(&record.name);
