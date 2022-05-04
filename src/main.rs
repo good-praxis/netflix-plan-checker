@@ -4,7 +4,7 @@ use serde::Deserialize;
 use std::env;
 use std::fs::File;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct Record {
     #[serde(alias = "Profile Name")]
     name: String,
@@ -15,8 +15,8 @@ struct Record {
     #[serde(alias = "Navigation Level")]
     nav: String,
 
-    #[serde(alias = "Click Utc Ts")]
-    timestamp: String,
+    #[serde(alias = "Click Utc Ts", deserialize_with = "ts_deserializer")]
+    timestamp: NaiveDateTime,
 }
 
 fn main() {
@@ -42,4 +42,14 @@ fn read_records(path: &str) -> Vec<Record> {
     }
 
     records
+}
+
+fn ts_deserializer<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let s: String = serde::Deserialize::deserialize(deserializer)?;
+    let dt = NaiveDateTime::parse_from_str(&s, "%Y-%m-%d %H:%M:%S")
+        .map_err(|e| serde::de::Error::custom(format!("{}", e)))?;
+    Ok(dt)
 }
