@@ -1,4 +1,3 @@
-use chrono::format::ParseError;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 use std::env;
@@ -8,9 +7,6 @@ use std::fs::File;
 struct Record {
     #[serde(alias = "Profile Name")]
     name: String,
-
-    #[serde(alias = "Source")]
-    source: String,
 
     #[serde(alias = "Navigation Level")]
     nav: String,
@@ -37,9 +33,16 @@ fn read_records(path: &str) -> Vec<Record> {
     let mut records = Vec::new();
     let file = File::open(path).unwrap();
     let mut rdr = csv::Reader::from_reader(file);
+
     for result in rdr.deserialize() {
-        records.push(result.unwrap());
+        let result: Record = result.unwrap();
+
+        if result.nav == "playback" || result.nav == "postPlay" || result.nav == "progressSpinner" {
+            records.push(result);
+        }
     }
+
+    records.sort_by(|a, b| a.timestamp.cmp(&b.timestamp));
 
     records
 }
