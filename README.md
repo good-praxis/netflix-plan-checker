@@ -12,3 +12,14 @@ The result will look like this:
 2022-04-26: 3 concurrent users
 ``` 
 
+using the flag `--verbose` or `-v` will print the profile names underneath the day, like this:
+``` 
+2022-04-26: 3 concurrent users
+Ferris, Foo, Bar, 
+
+2022-04-28: 3 concurrent users
+FooBar, Ferris, Foo, 
+
+2022-04-29: 2 concurrent users
+Foo, Bar, 
+```

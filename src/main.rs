@@ -33,9 +33,16 @@ fn main() {
 }
 
 fn render_overlap(overlap: BTreeMap<NaiveDate, HashSet<&str>>) {
+    let verbose = env::args().find(|arg| arg == "-v" || arg == "--verbose");
     for (date, names) in overlap {
         print!("{}: ", date);
         println!("{} concurrent users", names.len());
+        if verbose.is_some() {
+            for name in names {
+                print!("{}, ", name);
+            }
+            println!("\n");
+        }
     }
 }
 
